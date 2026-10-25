@@ -269,6 +269,87 @@ html.tv .mv{font-size:15px}html.tv .callout b{font-size:34px}
 @keyframes badgePop{0%{transform:skewX(-8deg) scale(2.6);filter:brightness(2)}25%{opacity:.2}35%{opacity:1}50%{opacity:.3}60%{opacity:1}100%{transform:skewX(-8deg) scale(1)}}
 .row.fx-up .rank{-webkit-text-stroke-color:var(--acid);transition:none}.row.fx-down .rank{-webkit-text-stroke-color:var(--blood)}
 @media (prefers-reduced-motion:reduce){.burst{display:none}}
+
+/* ---------- viber card ---------- */
+.row[data-key]:focus-visible,.p-card:focus-visible{outline:3px solid var(--acid);outline-offset:-3px}
+.p-card:focus-visible{outline-offset:3px}
+html.tv .row[data-key]:focus,html.tv .p-card:focus{outline:4px solid var(--acid);outline-offset:-4px;background:var(--steel)}
+.vc-open-t{cursor:pointer}
+.row .avatar.vc-open-t:hover,.p-card .portrait.vc-open-t:hover{box-shadow:3px 3px 0 var(--acid)}
+.player b.vc-open-t:hover,.p-name.vc-open-t:hover{color:var(--acid)}
+html.vc-lock,html.vc-lock body{overflow:hidden!important}
+.vc[hidden]{display:none}
+.vc{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px}
+.vc-back{position:absolute;inset:0;background:rgba(11,10,8,.82);backdrop-filter:blur(3px)}
+.vc-card{position:relative;width:min(860px,100%);max-height:calc(100vh - 48px);overflow:auto;overscroll-behavior:contain;background:var(--steel);color:var(--paper);border:2px solid var(--acid);box-shadow:10px 10px 0 var(--blood);padding:34px 34px 28px;outline:none;
+  background-image:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.015) 3px 4px)}
+.vc.in .vc-card{animation:vcIn .38s var(--out) both}.vc.in .vc-back{animation:vcFade .25s ease-out both}
+@keyframes vcIn{from{opacity:0;transform:translateY(26px) scale(.97)}}
+@keyframes vcFade{from{opacity:0}}
+.vc-x{position:absolute;right:18px;top:18px;z-index:3;width:48px;height:48px;border:none;background:var(--blood);color:var(--paper);font:26px/1 var(--display);cursor:pointer;transform:skewX(-8deg);box-shadow:4px 4px 0 var(--acid);transition:transform .15s var(--punch),box-shadow .15s var(--punch)}
+.vc-x span{display:inline-block;transform:skewX(8deg)}
+.vc-x:hover{transform:skewX(-8deg) translate(-2px,-2px);box-shadow:6px 6px 0 var(--acid)}
+.vc-x:focus-visible,.vc-card .btn:focus-visible{outline:3px solid var(--acid);outline-offset:4px}
+.vc-top{display:grid;grid-template-columns:minmax(220px,300px) 1fr;gap:32px;align-items:start}
+.vc-photo{position:relative;aspect-ratio:1/1;width:100%;background:var(--ink);border:3px solid var(--acid);box-shadow:8px 8px 0 var(--blood);overflow:hidden}
+.vc-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vc-photo span{position:absolute;inset:0;display:grid;place-items:center;font:clamp(84px,14vw,150px)/1 var(--display);color:transparent;-webkit-text-stroke:3px var(--acid);background:radial-gradient(circle at 30% 20%,rgba(232,255,42,.12),transparent 60%)}
+.vc-id{min-width:0;padding-right:44px}
+.vc-tags{display:flex;flex-wrap:wrap;gap:8px}
+.vc-tag{display:inline-block;padding:4px 12px;font:italic 800 13px var(--label);letter-spacing:.14em;text-transform:uppercase;transform:skewX(-8deg);border:1px solid var(--paper-15);color:var(--paper-72);max-width:100%;overflow-wrap:anywhere}
+.vc-tag.acid{background:var(--acid);color:var(--ink);border-color:var(--acid)}
+.vc-tag.red{background:var(--blood);color:var(--paper);border-color:var(--blood)}
+.vc-name{font:clamp(40px,6vw,76px)/.92 var(--display);text-transform:uppercase;font-weight:400;margin:14px 0 18px;overflow-wrap:anywhere}
+.vc-facts{display:grid;gap:12px}
+.vc-facts div{border-left:3px solid var(--acid);padding:2px 0 2px 12px}
+.vc-facts dt{font:800 12px var(--label);letter-spacing:.2em;text-transform:uppercase;color:var(--acid)}
+.vc-facts dd{font:500 16px/1.4 var(--body);color:var(--paper);overflow-wrap:anywhere}
+.vc-stats{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;background:var(--line);margin-top:28px;border-top:3px solid var(--acid)}
+.vc-stats div{background:var(--ink);padding:12px 8px 10px;text-align:center;min-width:0}
+.vc-stats small{display:block;font:700 11px var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--paper-40);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vc-stats b{display:block;font:40px/1.1 var(--display);font-weight:400;font-variant-numeric:tabular-nums;color:transparent;-webkit-text-stroke:1.5px var(--paper)}
+.vc-stats b.pts{-webkit-text-stroke-color:var(--acid)}
+.vc-stats b.dash,.vc-facts dd.dash{color:var(--paper-40);-webkit-text-stroke:0}
+.vc-foot{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:22px;font:700 12px var(--label);letter-spacing:.2em;text-transform:uppercase;color:var(--paper-40)}
+.vc-foot .btn{font-size:15px;padding:11px 22px}
+@media (max-width:900px){.vc-stats{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:640px){
+ .vc{padding:0;place-items:stretch}
+ .vc-card{width:100%;height:100%;max-height:none;border:none;box-shadow:none;padding:22px 18px calc(28px + env(safe-area-inset-bottom))}
+ .vc-top{grid-template-columns:1fr;gap:20px}
+ .vc-photo{width:min(100%,340px);margin:0 auto 0 0;box-shadow:6px 6px 0 var(--blood)}
+ .vc-id{padding-right:0}.vc-x{right:14px;top:14px}
+ .vc-name{font-size:clamp(38px,11vw,56px)}
+ .vc-stats{grid-template-columns:repeat(3,1fr)}.vc-stats b{font-size:32px}
+ @keyframes vcIn{from{opacity:.4;transform:translateY(60px)}}
+}
+html.tv .vc-card{width:min(1080px,100%);padding:40px}
+html.tv .vc-top{grid-template-columns:340px 1fr}
+html.tv .vc-facts dd{font-size:19px}html.tv .vc-facts dt,html.tv .vc-stats small{font-size:14px;color:var(--paper-72)}
+html.tv .vc-stats b{font-size:48px}
+html.tv .vc-x:focus,html.tv .vc-card .btn:focus{outline:4px solid var(--acid);outline-offset:5px}
+@media (prefers-reduced-motion:reduce){.vc.in .vc-card,.vc.in .vc-back{animation:none!important}}
+@media print{
+ @page{margin:12mm}
+ html,body{background:#fff!important;background-image:none!important;color:#000!important}
+ body{zoom:1!important}
+ body::after{display:none!important}
+ html.vc-lock,html.vc-lock body{overflow:visible!important}
+ html.vc-lock body>*:not(#vc){display:none!important}
+ .vc{position:static;display:block;padding:0}
+ .vc-back,.vc-x,.vc-foot .btn{display:none!important}
+ .vc-card{width:100%;max-height:none;overflow:visible;background:#fff!important;background-image:none!important;color:#000!important;border:2px solid #000;box-shadow:none!important;animation:none!important;padding:24px}
+ .vc-photo{border:2px solid #000;box-shadow:none;background:#fff}
+ .vc-photo span{-webkit-text-stroke:3px #000;background:none}
+ .vc-tag,.vc-tag.acid,.vc-tag.red{background:#fff!important;color:#000!important;border:1px solid #000}
+ .vc-name,.vc-facts dd,.vc-foot{color:#000!important}
+ .vc-facts dt{color:#000}.vc-facts div{border-left-color:#000}
+ .vc-stats{background:#000;border-top-color:#000}
+ .vc-stats div{background:#fff}.vc-stats small{color:#333}
+ .vc-stats b,.vc-stats b.pts{-webkit-text-stroke:1.5px #000;color:transparent}
+ .vc-stats b.dash,.vc-facts dd.dash{color:#555;-webkit-text-stroke:0}
+ .vc-top,.vc-stats{break-inside:avoid}
+}
 </style>
 <script>
 (function(){const P=new URLSearchParams(location.search),h=document.documentElement;
@@ -305,6 +386,22 @@ html.tv .mv{font-size:15px}html.tv .callout b{font-size:34px}
   <section class="board" id="board"></section>
   <footer><span>Vibers League · Season standings</span><span>Numbers load from the sheet every visit</span></footer>
 </div>
+<div id="vc" class="vc" hidden aria-hidden="true">
+  <div class="vc-back" data-close></div>
+  <article class="vc-card" id="vc-card" role="dialog" aria-modal="true" aria-labelledby="vc-name" tabindex="-1">
+    <button class="vc-x" id="vc-x" data-close aria-label="Close viber card"><span>✕</span></button>
+    <div class="vc-top">
+      <div class="vc-photo" id="vc-photo"></div>
+      <div class="vc-id">
+        <div class="vc-tags"><span class="vc-tag acid" id="vc-handle"></span><span class="vc-tag" id="vc-city"></span><span class="vc-tag red" id="vc-place"></span></div>
+        <h3 class="vc-name" id="vc-name"></h3>
+        <dl class="vc-facts" id="vc-facts"></dl>
+      </div>
+    </div>
+    <div class="vc-stats" id="vc-stats"></div>
+    <div class="vc-foot"><span id="vc-vid"></span><button class="btn acid" id="vc-print"><span>Print card</span></button></div>
+  </article>
+</div>
 <script>
 const SHEET="17f1nH3vcuk-pPknxTF1mcL6tn9v_gsexvFAlDhfq_lk";
 const URLS=[`https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?tqx=out:csv&sheet=Leaderboard`,`https://docs.google.com/spreadsheets/d/${SHEET}/export?format=csv`];
@@ -319,7 +416,7 @@ function parseCSV(t){const out=[];let row=[],f="",q=false;
   else f+=c}
  if(f!==""||row.length){row.push(f);if(row.some(x=>x!==""))out.push(row)}
  const h=out.shift().map(s=>s.trim());return out.map(r=>Object.fromEntries(h.map((k,i)=>[k,(r[i]??"").trim()])))}
-function norm(rows){const d=rows.filter(r=>(r.name||"").trim()).map(r=>{const o={key:(r.id||r.name).trim(),name:r.name.trim(),handle:(r.handle||"").trim(),photo_url:(r.photo_url||"").trim()};
+function norm(rows){const d=rows.filter(r=>(r.name||"").trim()).map(r=>{const o={...r,f:Object.fromEntries(Object.entries(r).map(([k,v])=>[String(k).trim(),String(v??"").trim()])),key:(r.id||r.name).trim(),name:r.name.trim(),handle:(r.handle||"").trim(),photo_url:(r.photo_url||"").trim()};
   NUM.forEach(k=>{const n=parseFloat(r[k]);o[k]=isNaN(n)?0:n});const ln=parseFloat(r.last_night);o.prev=Math.max(0,o.points-(isNaN(ln)?0:ln));return o})
  .sort((a,b)=>b.points-a.points||a.name.localeCompare(b.name));
  d.forEach(p=>p.place=1+d.filter(x=>x.points>p.points).length);
@@ -344,12 +441,12 @@ function draw(){if(FIRST){FIRST=false;document.documentElement.classList.add('an
  const disp=pl.length>=2?lay:pod;
  $('podium').style.gridTemplateColumns=(LB.tv||window.innerWidth>900)?disp.map(p=>p.place==1?"1.15fr":"1fr").join(" "):"";
  $('podium').innerHTML=disp.map(p=>{const pc=p.place,c=cls[pc],tie=DATA.filter(x=>x.place==pc).length>1;
-  return `<article class="p-card ${c}">${pc==1?'<div class="crown">Top of the card</div>':''}<div class="p-num">${p.place}</div>
-  <div class="portrait">${face(p)}</div><div class="p-tag">${tie?'Tied ':''}${ord(p.place)} place · ${esc(p.handle)} ${badge(p)}</div><div class="p-name">${esc(p.name)}</div>
+  return `<article class="p-card ${c}" tabindex="0" data-key="${esc(p.key)}" aria-label="${esc(p.name)}, open viber card">${pc==1?'<div class="crown">Top of the card</div>':''}<div class="p-num">${p.place}</div>
+  <div class="portrait vc-open-t">${face(p)}</div><div class="p-tag">${tie?'Tied ':''}${ord(p.place)} place · ${esc(p.handle)} ${badge(p)}</div><div class="p-name vc-open-t">${esc(p.name)}</div>
   <div class="p-stats"><div><small>Points</small><b class="pts">${p.points}</b></div><div><small>Nights</small><b>${p.episodes}</b></div><div><small>Wins</small><b>${p.wins}</b></div></div></article>`}).join("");
  $('board').innerHTML=DATA.length?`<div class="row head"><span>Place</span><span>Viber</span><span>Pts</span><span>Nights</span><span>Wins</span></div>`+
-(LB.top?DATA.slice(0,LB.top):DATA).map((p,k)=>`<div class="row ${p.isNew?'is-new':p.move>0?'is-up':p.move<0?'is-down':''} ${p.climber?'is-climber':''}" data-key="${esc(p.key)}" style="animation-delay:${k*.09}s"><span class="rank">${String(p.place).padStart(2,"0")}</span>
-  <div class="player"><div class="avatar">${face(p)}</div><div><b>${esc(p.name)}${badge(p)}</b><small>${esc(p.handle)}</small></div></div>
+(LB.top?DATA.slice(0,LB.top):DATA).map((p,k)=>`<div class="row ${p.isNew?'is-new':p.move>0?'is-up':p.move<0?'is-down':''} ${p.climber?'is-climber':''}" data-key="${esc(p.key)}" tabindex="0" aria-label="${esc(p.name)}, open viber card" style="animation-delay:${k*.09}s"><span class="rank">${String(p.place).padStart(2,"0")}</span>
+  <div class="player"><div class="avatar vc-open-t">${face(p)}</div><div><b class="vc-open-t">${esc(p.name)}${badge(p)}</b><small>${esc(p.handle)}</small></div></div>
   <span class="num pts" data-to="${p.points}">${p.points}</span><span class="num">${p.episodes}</span><span class="num">${p.wins}</span></div>`).join(""):"";
 }
 
@@ -400,20 +497,20 @@ async function load(){$('status').textContent="Loading from the sheet…";
  for(const f of tries){try{const d=norm(await f());if(!d.length)throw 0;DATA=d;LIVE=true;$('error').innerHTML="";
    $('status').textContent="Live · loaded "+new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit",second:"2-digit"});
    const order=DATA.map(p=>p.key).join("|"),prevOrder=LASTORDER,prevPts=LASTPTS,first=prevOrder===null;
-   draw();
+   draw();VC.refresh();
    if(first||FORCE||LB.replay)playNight();
    else if(order!==prevOrder){const o={};prevOrder.split("|").forEach((k,i)=>o[k]=i);animate(o,prevPts)}
    FORCE=false;LASTORDER=order;LASTPTS=Object.fromEntries(DATA.map(p=>[p.key,p.points]));return}catch(e){}}
  DATA=[];draw();$("count").textContent="--";
  $('error').innerHTML=`<div class="err"><h3>Couldn't reach the sheet</h3><p>The standings didn't load, so nothing is shown rather than old numbers. Check the connection and try again. It also retries on its own every 30 seconds.</p><button class="btn red" onclick="load()"><span>Try again</span></button></div>`;
  $('status').textContent="Not loaded";}
-$('refresh').onclick=()=>{FORCE=true;load()};addEventListener('resize',()=>{applyMode();DATA.length&&draw()});
+$('refresh').onclick=()=>{FORCE=true;load()};let LASTW=innerWidth;addEventListener('resize',()=>{applyMode();if(innerWidth!==LASTW){LASTW=innerWidth;DATA.length&&draw()}});
 applyMode();if(LB.tv)setTimeout(()=>$('refresh').focus({preventScroll:true}),300);
 /* slow auto-scroll for TV/embed when content is taller than the screen */
 (function(){let dir=1,hold=Date.now()+4000,last=0;
  addEventListener('keydown',()=>{hold=Date.now()+15000});
  function step(t){const dt=Math.min(64,t-(last||t));last=t;
-  if((LB.tv||LB.embed)&&LB.scroll&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  if((LB.tv||LB.embed)&&LB.scroll&&!VC.isOpen()&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
    const z=parseFloat(document.body.style.zoom)||1,max=document.documentElement.scrollHeight-innerHeight/1;
    if(max>4&&Date.now()>hold){const y=scrollY+dt*0.03*z*dir;
     if(y>=max){scrollTo(0,max);hold=Date.now()+5000;dir=0}
@@ -421,6 +518,80 @@ applyMode();if(LB.tv)setTimeout(()=>$('refresh').focus({preventScroll:true}),300
    if(dir===0&&Date.now()>hold){scrollTo({top:0,behavior:'smooth'});dir=1;hold=Date.now()+6000}}
   requestAnimationFrame(step)}
  requestAnimationFrame(step)})();
+
+/* ---------- viber card ---------- */
+const VC=(function(){
+ const root=$('vc'),card=$('vc-card'),FACTS=[["builds_with","Builds with"],["signature_move","Signature move"],["known_for","Known for"],["favourite_build","Favourite build"]],
+  STATS=[["points","Points"],["episodes","Nights"],["wins","Wins"],["peoples_choice","People's Choice"],["yellow_cards","Yellow cards"],["best_night","Best night"],["last_night","Last night"]];
+ let openKey=null,pushed=false,origin=null,savedY=0;
+ const val=(p,k)=>{const v=p.f&&p.f[k];return v==null||v===""?"":v};
+ const byKey=k=>DATA.find(p=>p.key===k);
+ function setText(el,v){el.textContent=v||"—";el.classList.toggle('dash',!v)}
+ function bigPhoto(p){const box=$('vc-photo');box.textContent="";const u=photo(val(p,'photo_url'));
+  const ini=()=>{box.textContent="";const s=document.createElement('span');s.textContent=initials(p.name)||"?";box.appendChild(s)};
+  if(!u){ini();return}
+  const id=u.split('id=')[1].split('&')[0],srcs=[`https://drive.google.com/thumbnail?id=${id}&sz=w1000`,`https://lh3.googleusercontent.com/d/${id}=w1000`];
+  if(box.dataset.src===srcs[0]&&box.querySelector('img'))return;
+  const img=document.createElement('img');img.alt=p.name;img.referrerPolicy="no-referrer";let k=0;
+  img.onerror=()=>{k++;if(k<srcs.length)img.src=srcs[k];else{box.dataset.src="";ini()}};
+  img.src=srcs[0];box.dataset.src=srcs[0];box.appendChild(img)}
+ function fill(p){
+  $('vc-name').textContent=p.name;setText($('vc-handle'),val(p,'handle'));setText($('vc-city'),val(p,'city'));
+  $('vc-place').textContent=val(p,'points')===""?"Unranked":`${ord(p.place)} place`;
+  $('vc-vid').textContent=`Viber ${p.key}`;
+  const ph=$('vc-photo');if(ph.dataset.for!==p.key){ph.dataset.src="";ph.dataset.for=p.key}bigPhoto(p);
+  const fx=$('vc-facts');fx.textContent="";FACTS.forEach(([k,l])=>{const d=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=l;setText(dd,val(p,k));d.append(dt,dd);fx.appendChild(d)});
+  const st=$('vc-stats');st.textContent="";STATS.forEach(([k,l])=>{const d=document.createElement('div'),s=document.createElement('small'),b=document.createElement('b');s.textContent=l;s.title=l;setText(b,val(p,k));if(k==='points')b.classList.add('pts');d.append(s,b);st.appendChild(d)})}
+ function focusables(){return [...card.querySelectorAll('button,[href],[tabindex]:not([tabindex="-1"])')].filter(e=>e.offsetParent!==null||getComputedStyle(e).position==='fixed')}
+ function show(key,from){const p=byKey(key);if(!p)return false;
+  fill(p);if(openKey)return true;
+  openKey=key;origin=from||{type:'row',key};savedY=scrollY;
+  document.documentElement.classList.add('vc-lock');root.hidden=false;root.setAttribute('aria-hidden','false');
+  root.classList.remove('in');if(!RM()){root.offsetWidth;root.classList.add('in')}
+  card.scrollTop=0;$('vc-x').focus({preventScroll:true});scrollTo(0,savedY);return true}
+ function hide(){if(!openKey)return;openKey=null;pushed=false;
+  root.hidden=true;root.setAttribute('aria-hidden','true');root.classList.remove('in');
+  document.documentElement.classList.remove('vc-lock');scrollTo(0,savedY);
+  const o=origin;origin=null;
+  if(o){const sel=o.type==='pod'?`.p-card[data-key="${CSS.escape(o.key)}"]`:`.row[data-key="${CSS.escape(o.key)}"]`;
+   const el=document.querySelector(sel)||document.querySelector(`[data-key="${CSS.escape(o.key)}"][tabindex]`);el&&el.focus({preventScroll:true})}
+  scrollTo(0,savedY);requestAnimationFrame(()=>scrollTo(0,savedY))}
+ function open(key,from){if(!byKey(key))return;if(openKey===key)return;
+  if(openKey){history.replaceState({vc:key},"","#"+encodeURIComponent(key));fill(byKey(key));openKey=key;return}
+  history.pushState({vc:key},"","#"+encodeURIComponent(key));pushed=true;show(key,from)}
+ function close(){if(!openKey)return;
+  if(pushed){pushed=false;history.back();/* popstate hides */setTimeout(()=>{if(openKey&&!hashKey())hide()},400)}
+  else{history.replaceState(null,"",location.pathname+location.search);hide()}}
+ const hashKey=()=>{try{return decodeURIComponent(location.hash.slice(1))}catch(e){return ""}};
+ function sync(){const k=hashKey();
+  if(k&&byKey(k)){if(openKey!==k){if(openKey)fill(byKey(k)),openKey=k;else{pushed=false;show(k)}}}
+  else if(openKey)hide()}
+ addEventListener('popstate',sync);addEventListener('hashchange',sync);
+ root.addEventListener('click',e=>{if(e.target.closest('[data-close]'))close()});
+ $('vc-print').onclick=()=>print();
+ function originOf(el){const pc=el.closest('.p-card[data-key]');if(pc)return{type:'pod',key:pc.dataset.key};const r=el.closest('.row[data-key]');return r?{type:'row',key:r.dataset.key}:null}
+ document.addEventListener('click',e=>{const t=e.target.closest('.vc-open-t');if(!t||root.contains(t))return;const o=originOf(t);if(!o)return;e.preventDefault();open(o.key,o)});
+ document.addEventListener('keydown',e=>{
+  if(openKey){
+   if(e.key==='Escape'||e.key==='Backspace'||e.key==='GoBack'||e.key==='BrowserBack'||e.keyCode===461||e.keyCode===10009){e.preventDefault();close();return}
+   const f=focusables();if(!f.length)return;const i=f.indexOf(document.activeElement);
+   if(e.key==='Tab'){e.preventDefault();const n=e.shiftKey?(i<=0?f.length-1:i-1):(i+1)%f.length;f[n].focus({preventScroll:true});return}
+   if(['ArrowDown','ArrowRight','ArrowUp','ArrowLeft'].includes(e.key)){
+    const fwd=e.key==='ArrowDown'||e.key==='ArrowRight';
+    if(document.activeElement===card||card.contains(document.activeElement)&&i>=0){e.preventDefault();f[fwd?(i+1)%f.length:(i<=0?f.length-1:i-1)].focus({preventScroll:true})}
+    return}
+   if(!card.contains(document.activeElement)){f[0].focus({preventScroll:true})}
+   return}
+  const a=document.activeElement,host=a&&a.matches&&a.matches('.row[data-key],.p-card[data-key]')?a:null;
+  if(host&&(e.key==='Enter'||e.key===' '||e.key==='Spacebar')){e.preventDefault();open(host.dataset.key,originOf(host));return}
+  if((e.key==='ArrowDown'||e.key==='ArrowUp')&&(host||LB.tv)){
+   const list=[...document.querySelectorAll('#podium .p-card[data-key],#board .row[data-key]')];if(!list.length)return;
+   e.preventDefault();let i=list.indexOf(host);i=i<0?0:Math.max(0,Math.min(list.length-1,i+(e.key==='ArrowDown'?1:-1)));
+   list[i].focus({preventScroll:true});list[i].scrollIntoView({block:'nearest',behavior:RM()?'auto':'smooth'})}
+ });
+ document.addEventListener('focusin',e=>{if(openKey&&!root.contains(e.target))$('vc-x').focus({preventScroll:true})});
+ return{isOpen:()=>!!openKey,key:()=>openKey,refresh(){if(openKey){const p=byKey(openKey);if(p)fill(p)}else sync()},open,close}
+})();
 load();setInterval(load,30000);
 </script>
 </body>
