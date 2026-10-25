@@ -180,7 +180,61 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font:700 12px var(--
 }
 .pcol{display:flex;flex-direction:column;justify-content:flex-end;gap:22px}.p-card.first,.p-card.second,.p-card.third{}
 @media (max-width:900px){.pcol.top{order:-1}.pcol{gap:16px}}
+
+/* ---------- tablets 641-1366 ---------- */
+@media (min-width:641px) and (max-width:900px){
+ .row{grid-template-columns:64px 1fr 80px 80px 70px;gap:12px;padding:14px 10px}
+ .row.head span:nth-child(n+3),.num{text-align:right}
+ .podium{grid-template-columns:1fr 1fr!important}.podium .p-card.first{grid-column:1/-1}
+ .hero{padding:50px 0 40px}.p-num{font-size:140px}
+}
+@media (min-width:901px) and (max-width:1366px){
+ .shell{padding:0 32px}.hero{padding:56px 0 44px}
+ .row{grid-template-columns:72px 1fr 110px 90px 90px}
+ .podium{gap:16px}.p-card{padding:26px 22px 24px}.p-card.first{padding-top:44px}
+ .p-name{font-size:clamp(26px,2.8vw,40px)}.p-num{font-size:150px}
+}
+@media (orientation:landscape) and (max-height:900px) and (max-width:1366px) and (min-width:901px){.hero{padding:34px 0 20px}.hero h1{font-size:clamp(56px,7vw,110px)}.hero-meta{margin-top:18px}.section-head{margin:34px 0 18px}}
+/* ---------- TV / large screen (zoomed from a 1280 design width) ---------- */
+html.tv .shell{max-width:none;padding:36px 64px}
+html.tv .ticker{font-size:16px}
+html.tv nav{padding:0 0 16px}
+html.tv .hero{padding:24px 0 8px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:0 30px}html.tv .kicker{grid-column:1/-1}
+html.tv .hero h1{font-size:76px;margin-top:8px}html.tv .hero h1 .it{margin-right:.12em}html.tv .hero h1 br{display:none}
+html.tv .hero-meta{margin:0}html.tv .hero-meta p{display:none}
+html.tv .section-head{margin:26px 0 16px}html.tv h2{font-size:48px}
+html.tv .p-card{padding:22px 22px 20px}html.tv .p-card.first{padding-top:40px}
+html.tv .p-num{font-size:130px}html.tv .portrait{width:80px;height:80px}html.tv .first .portrait{width:96px;height:96px}
+html.tv .p-name{font-size:34px}html.tv .p-tag{font-size:13px;color:var(--paper-72)}html.tv .first .p-tag{color:var(--acid)}
+html.tv .p-stats small,html.tv .row.head{font-size:13px;color:var(--paper-72)}
+html.tv .controls{margin:28px 0 14px}
+html.tv .row{grid-template-columns:84px 1fr 130px 110px 110px;padding:12px 16px}
+html.tv .rank{font-size:44px;-webkit-text-stroke-color:var(--paper)}
+html.tv .player b{font-size:26px}html.tv .player small{font-size:15px;color:var(--paper-72)}
+html.tv .avatar{width:52px;height:52px}html.tv .num{font-size:32px}
+html.tv .sync{font-size:14px;color:var(--paper-72)}
+html.tv .btn:focus,html.tv .btn:focus-visible{outline:4px solid var(--acid);outline-offset:5px}
+.btn:focus-visible{outline:3px solid var(--acid);outline-offset:4px}
+html.tv footer{padding:16px 0 0}
+/* ---------- embed / overlay ---------- */
+html.embed .ticker,html.embed nav,html.embed .hero,html.embed footer{display:none}
+html.embed .shell{padding-top:24px;padding-bottom:24px}
+html.embed .section-head{margin-top:0}
+html.transparent,html.transparent body{background:transparent!important;background-image:none!important}
+html.transparent body::after{display:none}
+html.transparent .row{background:rgba(11,10,8,.82)}html.transparent .row.head{background:rgba(11,10,8,.9)}
+html.transparent .p-card{background:rgba(26,25,22,.92)}
+html:not(.anim) .p-card,html:not(.anim) .row{animation:none!important}
 </style>
+<script>
+(function(){const P=new URLSearchParams(location.search),h=document.documentElement;
+ window.LB={mode:(P.get("mode")||"auto").toLowerCase(),embed:P.get("embed")==="1",transparent:P.get("transparent")==="1",top:Math.max(0,parseInt(P.get("top"))||0),scroll:P.get("autoscroll")!=="0"};
+ window.applyMode=function(){const tv=LB.mode==="tv"||(LB.mode==="auto"&&innerWidth>=1920);
+  h.classList.toggle("tv",tv);h.classList.toggle("embed",LB.embed);h.classList.toggle("transparent",LB.transparent);
+  document.body&&(document.body.style.zoom=tv?Math.max(1,innerWidth/1280):"");LB.tv=tv};
+ h.classList.toggle("embed",LB.embed);h.classList.toggle("transparent",LB.transparent);
+})();
+</script>
 </head>
 <body>
 <div class="ticker"><div class="ticker__track" id="tick"><span>Vibers League standings</span><span>Live from the sheet</span><span>Vibers League standings</span><span>Live from the sheet</span></div></div>
@@ -191,7 +245,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;font:700 12px var(--
   </nav>
   <header class="hero">
     <div class="kicker">Season standings</div>
-    <h1>Who's <span class="it">On</span><br>Top <span class="red">Tonight</span></h1>
+    <h1>Who's <span class="it">On</span><br> Top <span class="red">Tonight</span></h1>
     <div class="hero-meta">
       <p>Every viber ranked by points. Tied points share a place.</p>
       <div class="clock"><small>Vibers on the card</small><b id="count">--</b></div>
@@ -230,7 +284,8 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"
 function face(p){const u=photo(p.photo_url),i=esc(initials(p.name));
  return u?`<img src="${u}" alt="${esc(p.name)}" referrerpolicy="no-referrer" data-alt="${u.replace('https://drive.google.com/thumbnail?id=','https://lh3.googleusercontent.com/d/').replace('&sz=w400','=w400')}" onerror="if(this.dataset.alt){this.src=this.dataset.alt;this.dataset.alt=''}else this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${i}'}))">`:`<span>${i}</span>`}
 const ord=n=>n+(["th","st","nd","rd"][(n%100-20)%10]||["th","st","nd","rd"][n%100]||"th");
-function draw(){
+let FIRST=true;
+function draw(){if(FIRST){FIRST=false;document.documentElement.classList.add('anim');setTimeout(()=>document.documentElement.classList.remove('anim'),2500)}
  $('count').textContent=String(DATA.length).padStart(2,"0");
  const t=DATA.slice(0,6).map(p=>`${ord(p.place)} ${p.name} · ${p.points} pts`);
  $('tick').innerHTML=Array(2).fill(t.map(x=>`<span>${esc(x)}</span>`).join("")).join("");
@@ -239,13 +294,13 @@ function draw(){
  const pod=DATA.filter(p=>p.place<=3),n=pod.length;
  const lay=[...pod.filter(p=>p.place==pl[1]),...pod.filter(p=>p.place==pl[0]),...pod.filter(p=>pl.length>2&&p.place==pl[2])];
  const disp=pl.length>=2?lay:pod;
- $('podium').style.gridTemplateColumns=window.innerWidth>900?disp.map(p=>p.place==1?"1.15fr":"1fr").join(" "):"";
+ $('podium').style.gridTemplateColumns=(LB.tv||window.innerWidth>900)?disp.map(p=>p.place==1?"1.15fr":"1fr").join(" "):"";
  $('podium').innerHTML=disp.map(p=>{const pc=p.place,c=cls[pc],tie=DATA.filter(x=>x.place==pc).length>1;
   return `<article class="p-card ${c}">${pc==1?'<div class="crown">Top of the card</div>':''}<div class="p-num">${p.place}</div>
   <div class="portrait">${face(p)}</div><div class="p-tag">${tie?'Tied ':''}${ord(p.place)} place · ${esc(p.handle)}</div><div class="p-name">${esc(p.name)}</div>
   <div class="p-stats"><div><small>Points</small><b class="pts">${p.points}</b></div><div><small>Nights</small><b>${p.episodes}</b></div><div><small>Wins</small><b>${p.wins}</b></div></div></article>`}).join("");
  $('board').innerHTML=DATA.length?`<div class="row head"><span>Place</span><span>Viber</span><span>Pts</span><span>Nights</span><span>Wins</span></div>`+
- DATA.map((p,k)=>`<div class="row" style="animation-delay:${k*.09}s"><span class="rank">${String(p.place).padStart(2,"0")}</span>
+(LB.top?DATA.slice(0,LB.top):DATA).map((p,k)=>`<div class="row" style="animation-delay:${k*.09}s"><span class="rank">${String(p.place).padStart(2,"0")}</span>
   <div class="player"><div class="avatar">${face(p)}</div><div><b>${esc(p.name)}</b><small>${esc(p.handle)}</small></div></div>
   <span class="num pts">${p.points}</span><span class="num">${p.episodes}</span><span class="num">${p.wins}</span></div>`).join(""):"";
 }
@@ -262,7 +317,21 @@ async function load(){$('status').textContent="Loading from the sheet…";
  DATA=[];draw();$("count").textContent="--";
  $('error').innerHTML=`<div class="err"><h3>Couldn't reach the sheet</h3><p>The standings didn't load, so nothing is shown rather than old numbers. Check the connection and try again. It also retries on its own every 30 seconds.</p><button class="btn red" onclick="load()"><span>Try again</span></button></div>`;
  $('status').textContent="Not loaded";}
-$('refresh').onclick=load;addEventListener('resize',()=>DATA.length&&draw());load();setInterval(load,30000);
+$('refresh').onclick=load;addEventListener('resize',()=>{applyMode();DATA.length&&draw()});
+applyMode();if(LB.tv)setTimeout(()=>$('refresh').focus({preventScroll:true}),300);
+/* slow auto-scroll for TV/embed when content is taller than the screen */
+(function(){let dir=1,hold=Date.now()+4000,last=0;
+ addEventListener('keydown',()=>{hold=Date.now()+15000});
+ function step(t){const dt=Math.min(64,t-(last||t));last=t;
+  if((LB.tv||LB.embed)&&LB.scroll&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+   const z=parseFloat(document.body.style.zoom)||1,max=document.documentElement.scrollHeight-innerHeight/1;
+   if(max>4&&Date.now()>hold){const y=scrollY+dt*0.03*z*dir;
+    if(y>=max){scrollTo(0,max);hold=Date.now()+5000;dir=0}
+    else scrollTo(0,y)}
+   if(dir===0&&Date.now()>hold){scrollTo({top:0,behavior:'smooth'});dir=1;hold=Date.now()+6000}}
+  requestAnimationFrame(step)}
+ requestAnimationFrame(step)})();
+load();setInterval(load,30000);
 </script>
 </body>
 </html>
