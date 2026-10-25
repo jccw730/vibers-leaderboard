@@ -225,10 +225,33 @@ html.transparent body::after{display:none}
 html.transparent .row{background:rgba(11,10,8,.82)}html.transparent .row.head{background:rgba(11,10,8,.9)}
 html.transparent .p-card{background:rgba(26,25,22,.92)}
 html:not(.anim) .p-card,html:not(.anim) .row{animation:none!important}
+
+.board{position:relative}
+.board.flip .row{animation:none!important}
+.mv{display:inline-block;margin-left:10px;padding:2px 8px;font:italic 800 12px var(--label);letter-spacing:.08em;transform:skewX(-8deg);vertical-align:middle;line-height:1.5}
+.mv.up{background:var(--acid);color:var(--ink)}.mv.down{background:var(--blood);color:var(--paper)}
+.mv.new{background:var(--paper);color:var(--ink)}.mv.same{color:var(--paper-40);font-style:normal}
+.p-tag .mv{margin-left:6px;font-size:11px}
+.board.go .row.is-up{animation:glowUp 1.8s ease-out both!important}
+.board.go .row.is-down{animation:flashDown 1.4s ease-out both!important}
+.board.go .row.is-new{animation:glowNew 1.8s ease-out both!important}
+@keyframes glowUp{0%,30%{background:rgba(232,255,42,.0);box-shadow:none}55%{background:rgba(232,255,42,.22);box-shadow:inset 4px 0 0 var(--acid),0 0 30px rgba(232,255,42,.35)}100%{background:transparent;box-shadow:inset 3px 0 0 rgba(232,255,42,.6)}}
+@keyframes flashDown{0%,30%{background:transparent}45%{background:rgba(255,43,43,.35)}60%{background:rgba(255,43,43,.08)}72%{background:rgba(255,43,43,.28)}100%{background:transparent;box-shadow:inset 3px 0 0 rgba(255,43,43,.6)}}
+@keyframes glowNew{0%,30%{background:transparent}55%{background:rgba(243,239,230,.16)}100%{background:transparent}}
+.board.settled .row.is-up{box-shadow:inset 3px 0 0 rgba(232,255,42,.6)}.board.settled .row.is-down{box-shadow:inset 3px 0 0 rgba(255,43,43,.6)}
+.row.is-climber{position:relative}
+.board.go .row.is-climber::after{content:"";position:absolute;inset:-6px;border:3px solid var(--acid);pointer-events:none;animation:burst 1.1s cubic-bezier(0.16,1,0.3,1) 1.5s both}
+@keyframes burst{0%{opacity:0;transform:scale(.96)}30%{opacity:1}100%{opacity:0;transform:scale(1.06,1.5)}}
+.board.settled .row.is-climber,.board.go .row.is-climber{outline:2px solid var(--acid);outline-offset:-2px}
+.callout{display:inline-flex;align-items:center;gap:14px;background:var(--acid);color:var(--ink);padding:8px 20px;margin:0 0 16px;transform:rotate(-2deg) skewX(-8deg);box-shadow:6px 6px 0 var(--blood);animation:stamp .7s cubic-bezier(0.2,1.4,0.3,1) 1.6s both}
+.callout span{font:800 12px var(--label);letter-spacing:.2em;text-transform:uppercase}
+.callout b{font:28px var(--display);font-weight:400;text-transform:uppercase}.callout em{font:italic 800 22px var(--label)}
+@media (prefers-reduced-motion:reduce){.callout{animation:none}}
+html.tv .mv{font-size:15px}html.tv .callout b{font-size:34px}
 </style>
 <script>
 (function(){const P=new URLSearchParams(location.search),h=document.documentElement;
- window.LB={mode:(P.get("mode")||"auto").toLowerCase(),embed:P.get("embed")==="1",transparent:P.get("transparent")==="1",top:Math.max(0,parseInt(P.get("top"))||0),scroll:P.get("autoscroll")!=="0"};
+ window.LB={mode:(P.get("mode")||"auto").toLowerCase(),embed:P.get("embed")==="1",transparent:P.get("transparent")==="1",top:Math.max(0,parseInt(P.get("top"))||0),scroll:P.get("autoscroll")!=="0",replay:P.get("replay")==="1"};
  window.applyMode=function(){const tv=LB.mode==="tv"||(LB.mode==="auto"&&innerWidth>=1920);
   h.classList.toggle("tv",tv);h.classList.toggle("embed",LB.embed);h.classList.toggle("transparent",LB.transparent);
   document.body&&(document.body.style.zoom=tv?Math.max(1,innerWidth/1280):"");LB.tv=tv};
@@ -257,6 +280,7 @@ html:not(.anim) .p-card,html:not(.anim) .row{animation:none!important}
   <div class="controls">
     <div class="sync"><button class="btn acid" id="refresh"><span>Refresh</span></button><span id="status">Loading from the sheet…</span></div>
   </div>
+  <div id="callout"></div>
   <section class="board" id="board"></section>
   <footer><span>Vibers League · Season standings</span><span>Numbers load from the sheet every visit</span></footer>
 </div>
@@ -274,17 +298,20 @@ function parseCSV(t){const out=[];let row=[],f="",q=false;
   else f+=c}
  if(f!==""||row.length){row.push(f);if(row.some(x=>x!==""))out.push(row)}
  const h=out.shift().map(s=>s.trim());return out.map(r=>Object.fromEntries(h.map((k,i)=>[k,(r[i]??"").trim()])))}
-function norm(rows){const d=rows.filter(r=>(r.name||"").trim()).map(r=>{const o={name:r.name.trim(),handle:(r.handle||"").trim(),photo_url:(r.photo_url||"").trim()};
-  NUM.forEach(k=>{const n=parseFloat(r[k]);o[k]=isNaN(n)?0:n});return o})
+function norm(rows){const d=rows.filter(r=>(r.name||"").trim()).map(r=>{const o={key:(r.id||r.name).trim(),name:r.name.trim(),handle:(r.handle||"").trim(),photo_url:(r.photo_url||"").trim()};
+  NUM.forEach(k=>{const n=parseFloat(r[k]);o[k]=isNaN(n)?0:n});const ln=parseFloat(r.last_night);o.prev=Math.max(0,o.points-(isNaN(ln)?0:ln));return o})
  .sort((a,b)=>b.points-a.points||a.name.localeCompare(b.name));
- d.forEach(p=>p.place=1+d.filter(x=>x.points>p.points).length);return d}
+ d.forEach(p=>p.place=1+d.filter(x=>x.points>p.points).length);
+ d.forEach(p=>{p.prevPlace=1+d.filter(x=>x.prev>p.prev).length;p.isNew=p.prev<=0&&p.points>0;p.move=p.isNew?0:p.prevPlace-p.place});
+ const best=Math.max(0,...d.map(p=>p.move));d.forEach(p=>p.climber=best>0&&p.move===best);return d}
+function badge(p){return p.isNew?'<span class="mv new">NEW</span>':p.move>0?`<span class="mv up">▲${p.move}</span>`:p.move<0?`<span class="mv down">▼${-p.move}</span>`:'<span class="mv same">–</span>'}
 function photo(u){const m=(u||"").match(/\/d\/([\w-]+)/)||(u||"").match(/[?&]id=([\w-]+)/);return m?`https://drive.google.com/thumbnail?id=${m[1]}&sz=w400`:""}
 function initials(n){return n.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase()}
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function face(p){const u=photo(p.photo_url),i=esc(initials(p.name));
  return u?`<img src="${u}" alt="${esc(p.name)}" referrerpolicy="no-referrer" data-alt="${u.replace('https://drive.google.com/thumbnail?id=','https://lh3.googleusercontent.com/d/').replace('&sz=w400','=w400')}" onerror="if(this.dataset.alt){this.src=this.dataset.alt;this.dataset.alt=''}else this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${i}'}))">`:`<span>${i}</span>`}
 const ord=n=>n+(["th","st","nd","rd"][(n%100-20)%10]||["th","st","nd","rd"][n%100]||"th");
-let FIRST=true;
+let FIRST=true,FORCE=false;
 function draw(){if(FIRST){FIRST=false;document.documentElement.classList.add('anim');setTimeout(()=>document.documentElement.classList.remove('anim'),2500)}
  $('count').textContent=String(DATA.length).padStart(2,"0");
  const t=DATA.slice(0,6).map(p=>`${ord(p.place)} ${p.name} · ${p.points} pts`);
@@ -297,13 +324,37 @@ function draw(){if(FIRST){FIRST=false;document.documentElement.classList.add('an
  $('podium').style.gridTemplateColumns=(LB.tv||window.innerWidth>900)?disp.map(p=>p.place==1?"1.15fr":"1fr").join(" "):"";
  $('podium').innerHTML=disp.map(p=>{const pc=p.place,c=cls[pc],tie=DATA.filter(x=>x.place==pc).length>1;
   return `<article class="p-card ${c}">${pc==1?'<div class="crown">Top of the card</div>':''}<div class="p-num">${p.place}</div>
-  <div class="portrait">${face(p)}</div><div class="p-tag">${tie?'Tied ':''}${ord(p.place)} place · ${esc(p.handle)}</div><div class="p-name">${esc(p.name)}</div>
+  <div class="portrait">${face(p)}</div><div class="p-tag">${tie?'Tied ':''}${ord(p.place)} place · ${esc(p.handle)} ${badge(p)}</div><div class="p-name">${esc(p.name)}</div>
   <div class="p-stats"><div><small>Points</small><b class="pts">${p.points}</b></div><div><small>Nights</small><b>${p.episodes}</b></div><div><small>Wins</small><b>${p.wins}</b></div></div></article>`}).join("");
  $('board').innerHTML=DATA.length?`<div class="row head"><span>Place</span><span>Viber</span><span>Pts</span><span>Nights</span><span>Wins</span></div>`+
-(LB.top?DATA.slice(0,LB.top):DATA).map((p,k)=>`<div class="row" style="animation-delay:${k*.09}s"><span class="rank">${String(p.place).padStart(2,"0")}</span>
-  <div class="player"><div class="avatar">${face(p)}</div><div><b>${esc(p.name)}</b><small>${esc(p.handle)}</small></div></div>
-  <span class="num pts">${p.points}</span><span class="num">${p.episodes}</span><span class="num">${p.wins}</span></div>`).join(""):"";
+(LB.top?DATA.slice(0,LB.top):DATA).map((p,k)=>`<div class="row ${p.isNew?'is-new':p.move>0?'is-up':p.move<0?'is-down':''} ${p.climber?'is-climber':''}" data-key="${esc(p.key)}" style="animation-delay:${k*.09}s"><span class="rank">${String(p.place).padStart(2,"0")}</span>
+  <div class="player"><div class="avatar">${face(p)}</div><div><b>${esc(p.name)}${badge(p)}</b><small>${esc(p.handle)}</small></div></div>
+  <span class="num pts" data-to="${p.points}">${p.points}</span><span class="num">${p.episodes}</span><span class="num">${p.wins}</span></div>`).join(""):"";
 }
+
+const RM=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+let LASTORDER=null,LASTPTS={};
+function animate(fromOrder,fromPts){
+ const b=$('board'),rows=[...b.querySelectorAll('.row[data-key]')];if(!rows.length)return;
+ const c=DATA.find(p=>p.climber);
+ $('callout').innerHTML=c?`<div class="callout"><span>Biggest climber</span><b>${esc(c.name)}</b><em>▲${c.move}</em></div>`:"";
+ if(RM()){b.classList.add('settled');return}
+ b.classList.remove('settled','go');b.classList.add('flip');
+ const tops=rows.map(r=>r.offsetTop),byKey=Object.fromEntries(rows.map((r,i)=>[r.dataset.key,i]));
+ rows.forEach((r,i)=>{const j=fromOrder[r.dataset.key];const from=(j==null?rows.length:j);
+  const y=(from<tops.length?tops[from]:tops[tops.length-1]+60)-tops[i];
+  r.style.transition='none';r.style.transform=`translateY(${y}px)`;r.style.zIndex=String(100-Math.abs(i-from))});
+ b.offsetHeight;
+ requestAnimationFrame(()=>{rows.forEach((r,i)=>{r.style.transition=`transform 1.2s cubic-bezier(0.2,1.35,0.35,1) ${0.25+i*0.07}s`;r.style.transform='translateY(0)'});
+  b.classList.add('go');
+  rows.forEach((r,i)=>{const el=r.querySelector('.pts'),to=+el.dataset.to,f=fromPts[r.dataset.key]??to;if(f===to)return;
+   const t0=performance.now()+250+i*70,dur=1200;el.textContent=f;
+   (function tick(t){const k=Math.min(1,Math.max(0,(t-t0)/dur));el.textContent=Math.round(f+(to-f)*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(tick)})(t0)});
+  setTimeout(()=>{rows.forEach(r=>{const e=r.querySelector('.pts');e.textContent=e.dataset.to;r.style.transition='';r.style.transform='';r.style.zIndex=''});b.classList.remove('flip');b.classList.add('settled')},2400+rows.length*70)});
+}
+function nightOrder(){const s=[...DATA].sort((a,b)=>b.prev-a.prev||a.name.localeCompare(b.name));return Object.fromEntries(s.map((p,i)=>[p.key,i]))}
+function nightPts(){return Object.fromEntries(DATA.map(p=>[p.key,p.prev]))}
+function playNight(){animate(nightOrder(),nightPts())}
 function jsonp(){return new Promise((res,rej)=>{const cb="__gv"+Date.now(),sc=document.createElement("script");
  const done=()=>{delete window[cb];sc.remove()};const to=setTimeout(()=>{done();rej()},8000);
  window[cb]=r=>{clearTimeout(to);done();try{if(r.status==="error")throw 0;const cols=r.table.cols.map(c=>(c.label||c.id).trim());
@@ -313,11 +364,16 @@ function jsonp(){return new Promise((res,rej)=>{const cb="__gv"+Date.now(),sc=do
 async function load(){$('status').textContent="Loading from the sheet…";
  const tries=[jsonp,...URLS.map(u=>async()=>{const r=await fetch(u+"&t="+Date.now(),{cache:"no-store"});if(!r.ok)throw 0;const t=await r.text();if(!/^\s*"?id"?,/i.test(t))throw 0;return parseCSV(t)})];
  for(const f of tries){try{const d=norm(await f());if(!d.length)throw 0;DATA=d;LIVE=true;$('error').innerHTML="";
-   $('status').textContent="Live · loaded "+new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit",second:"2-digit"});draw();return}catch(e){}}
+   $('status').textContent="Live · loaded "+new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit",second:"2-digit"});
+   const order=DATA.map(p=>p.key).join("|"),prevOrder=LASTORDER,prevPts=LASTPTS,first=prevOrder===null;
+   draw();
+   if(first||FORCE||LB.replay)playNight();
+   else if(order!==prevOrder){const o={};prevOrder.split("|").forEach((k,i)=>o[k]=i);animate(o,prevPts)}
+   FORCE=false;LASTORDER=order;LASTPTS=Object.fromEntries(DATA.map(p=>[p.key,p.points]));return}catch(e){}}
  DATA=[];draw();$("count").textContent="--";
  $('error').innerHTML=`<div class="err"><h3>Couldn't reach the sheet</h3><p>The standings didn't load, so nothing is shown rather than old numbers. Check the connection and try again. It also retries on its own every 30 seconds.</p><button class="btn red" onclick="load()"><span>Try again</span></button></div>`;
  $('status').textContent="Not loaded";}
-$('refresh').onclick=load;addEventListener('resize',()=>{applyMode();DATA.length&&draw()});
+$('refresh').onclick=()=>{FORCE=true;load()};addEventListener('resize',()=>{applyMode();DATA.length&&draw()});
 applyMode();if(LB.tv)setTimeout(()=>$('refresh').focus({preventScroll:true}),300);
 /* slow auto-scroll for TV/embed when content is taller than the screen */
 (function(){let dir=1,hold=Date.now()+4000,last=0;
