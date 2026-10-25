@@ -551,6 +551,29 @@ html body .shell .board .row.is-climber{outline:0}
 html.tv body .shell .board .row{grid-template-columns:84px minmax(0,560px) 140px 100px 100px}
 html.tv body .shell .board .rank{font-size:44px}html.tv body .shell .board .num.pts{font-size:40px}html.tv body .shell .board .num.q{font-size:24px}
 html.tv .sc-q{width:30px;height:30px;font-size:17px}html.tv .sc-p{font-size:17px}
+
+/* whole-card click affordance */
+#podium .p-card[data-key],#board .row[data-key]{cursor:pointer}
+#podium .p-card[data-key]{transition:transform .15s var(--punch),box-shadow .15s,border-color .15s}
+#podium .p-card[data-key]:hover,#podium .p-card[data-key]:focus-visible{border-color:var(--acid);transform:translate(-3px,-3px) skewX(0);box-shadow:7px 7px 0 var(--blood)}
+#podium .p-card[data-key]:focus-visible{outline:3px solid var(--acid);outline-offset:4px}
+#board .row[data-key]:hover,#board .row[data-key]:focus-visible{background:rgba(243,239,230,.05);box-shadow:inset 4px 0 0 var(--blood)}
+#board .row.is-leader[data-key]:hover,#board .row.is-leader[data-key]:focus-visible{box-shadow:inset 4px 0 0 var(--acid);background:rgba(232,255,42,.12)}
+#board .row[data-key]:hover .player b,#podium .p-card[data-key]:hover .p-name{color:var(--acid)}
+@media (hover:none){#podium .p-card[data-key]:hover{transform:none;box-shadow:none}}
+@media (prefers-reduced-motion:reduce){#podium .p-card[data-key]{transition:none}#podium .p-card[data-key]:hover{transform:none}}
+
+/* share card */
+.vc-acts{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.vc-sm{margin-top:14px;border:2px solid var(--acid);background:var(--ink);padding:14px;box-shadow:6px 6px 0 var(--blood)}
+.vc-sm[hidden]{display:none}
+.vc-sm-url{width:100%;background:var(--steel);color:var(--paper-72);border:1px solid var(--line);font:13px var(--body);padding:8px 10px;margin-bottom:12px}
+.vc-sm-row{display:flex;flex-wrap:wrap;gap:10px}
+.vc-sm .btn{font-size:13px;padding:9px 14px;text-decoration:none;display:inline-block}
+.vc-sm .btn:focus-visible,#vc-share:focus-visible{outline:3px solid var(--acid);outline-offset:4px}
+.vc-toast{font:800 12px var(--label);letter-spacing:.18em;text-transform:uppercase;color:var(--acid);min-height:1em;margin-top:10px}
+@media (max-width:640px){.vc-foot{flex-wrap:wrap}.vc-acts{width:100%;justify-content:stretch}.vc-acts .btn{flex:1}.vc-sm .btn{flex:1 1 40%;text-align:center}}
+@media print{#vc-share,.vc-sm{display:none!important}}
 </style>
 <script>
 (function(){const P=new URLSearchParams(location.search),h=document.documentElement;
@@ -614,7 +637,16 @@ html.tv .sc-q{width:30px;height:30px;font-size:17px}html.tv .sc-p{font-size:17px
       </div>
     </div>
     <div class="vc-stats" id="vc-stats"></div>
-    <div class="vc-foot"><span id="vc-vid"></span><button class="btn acid" id="vc-print"><span>Print card</span></button></div>
+    <div class="vc-foot"><span id="vc-vid"></span><div class="vc-acts"><button class="btn ghost" id="vc-share" aria-haspopup="true" aria-expanded="false" aria-controls="vc-sm"><span>Share card</span></button><button class="btn acid" id="vc-print"><span>Print card</span></button></div></div>
+    <div class="vc-sm" id="vc-sm" role="group" aria-label="Share this card" hidden>
+      <input class="vc-sm-url" id="vc-sm-url" type="text" readonly aria-label="Card link" tabindex="-1">
+      <div class="vc-sm-row"><button class="btn acid" id="vc-sm-copy"><span>Copy link</span></button>
+      <a class="btn ghost" id="vc-sm-x" target="_blank" rel="noopener"><span>X</span></a>
+      <a class="btn ghost" id="vc-sm-wa" target="_blank" rel="noopener"><span>WhatsApp</span></a>
+      <a class="btn ghost" id="vc-sm-fb" target="_blank" rel="noopener"><span>Facebook</span></a>
+      <a class="btn ghost" id="vc-sm-em" target="_blank" rel="noopener"><span>Email</span></a></div>
+      <p class="vc-toast" id="vc-toast" role="status" aria-live="polite"></p>
+    </div>
   </article>
 </div>
 <div id="sc" class="nt sc" hidden aria-hidden="true">
@@ -825,6 +857,7 @@ const VC=(function(){
   img.onerror=()=>{k++;if(k<srcs.length)img.src=srcs[k];else{box.dataset.src="";ini()}};
   img.src=srcs[0];box.dataset.src=srcs[0];box.appendChild(img)}
  function fill(p){
+  const sm=$('vc-sm');if(sm&&!sm.hidden){sm.hidden=true;$('vc-share').setAttribute('aria-expanded','false')}
   $('vc-name').textContent=p.name;setText($('vc-handle'),val(p,'handle'));setText($('vc-city'),val(p,'city'));
   $('vc-place').textContent=val(p,'points')===""?"Unranked":`${ord(p.place)} place`;
   $('vc-vid').textContent=`Viber ${p.key}`;
@@ -858,8 +891,37 @@ const VC=(function(){
  addEventListener('popstate',sync);addEventListener('hashchange',sync);
  root.addEventListener('click',e=>{if(e.target.closest('[data-close]'))close()});
  $('vc-print').onclick=()=>print();
+ /* share */
+ const SM=$('vc-sm'),SB=$('vc-share');
+ function shareInfo(){const p=byKey(openKey);if(!p)return null;const q=new URLSearchParams(location.search);['embed','transparent','scroll','top','mode','bg','nextmatch'].forEach(k=>q.delete(k));
+  const qs=q.toString(),url=location.origin+location.pathname+(qs?'?'+qs:'')+'#'+encodeURIComponent(p.key);
+  return{url,title:`${p.name} — Vibers League`,text:`${p.name}: ${p.points} pts, place ${p.place}`}}
+ function smClose(focus){if(SM.hidden)return;SM.hidden=true;SB.setAttribute('aria-expanded','false');if(focus)SB.focus({preventScroll:true})}
+ function smOpen(){const i=shareInfo();if(!i)return;const u=encodeURIComponent(i.url),t=encodeURIComponent(i.text);
+  $('vc-sm-url').value=i.url;$('vc-toast').textContent='';
+  $('vc-sm-x').href=`https://twitter.com/intent/tweet?text=${t}&url=${u}`;
+  $('vc-sm-wa').href=`https://wa.me/?text=${encodeURIComponent(i.text+' '+i.url)}`;
+  $('vc-sm-fb').href=`https://www.facebook.com/sharer/sharer.php?u=${u}`;
+  $('vc-sm-em').href=`mailto:?subject=${encodeURIComponent(i.title)}&body=${encodeURIComponent(i.text+'\n'+i.url)}`;
+  SM.hidden=false;SB.setAttribute('aria-expanded','true');$('vc-sm-copy').focus({preventScroll:true});SM.scrollIntoView({block:'nearest'})}
+ function toast(m){const e=$('vc-toast');e.textContent=m;clearTimeout(toast.t);toast.t=setTimeout(()=>{e.textContent=''},2500)}
+ function fallbackCopy(){const inp=$('vc-sm-url');inp.focus({preventScroll:true});inp.select();inp.setSelectionRange(0,inp.value.length);let ok=false;try{ok=document.execCommand('copy')}catch(e){}
+  toast(ok?'Link copied':'Press Ctrl+C / ⌘C to copy');window.__copyVia='fallback';if(ok)$('vc-sm-copy').focus({preventScroll:true})}
+ $('vc-sm-copy').onclick=()=>{const v=$('vc-sm-url').value;
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(v).then(()=>{window.__copyVia='clipboard';toast('Link copied')},fallbackCopy);else fallbackCopy()};
+ SB.onclick=async()=>{if(!SM.hidden){smClose(true);return}const i=shareInfo();if(!i)return;
+  if(navigator.share){try{await navigator.share(i);return}catch(e){if(e&&e.name==='AbortError')return}}
+  smOpen()};
+ document.addEventListener('keydown',e=>{if(!openKey||SM.hidden)return;if(e.key==='Escape'||e.key==='GoBack'||e.key==='BrowserBack'||e.keyCode===461||e.keyCode===10009||(e.key==='Backspace'&&document.activeElement!==$('vc-sm-url'))){e.preventDefault();e.stopImmediatePropagation();smClose(true)}},true);
  function originOf(el){const pc=el.closest('.p-card[data-key]');if(pc)return{type:'pod',key:pc.dataset.key};const r=el.closest('.row[data-key]');return r?{type:'row',key:r.dataset.key}:null}
- document.addEventListener('click',e=>{const t=e.target.closest('.vc-open-t');if(!t||root.contains(t))return;const o=originOf(t);if(!o)return;e.preventDefault();open(o.key,o)});
+ /* whole podium card / table row is the click target; drag or text selection doesn't open */
+ let PD=null;document.addEventListener('pointerdown',e=>{PD={x:e.clientX,y:e.clientY}},true);
+ document.addEventListener('click',e=>{const t=e.target.closest('.p-card[data-key],.row[data-key]');if(!t||root.contains(t))return;
+  if(e.target.closest('a,button,input,select,textarea,label,.sc-q,.navf,[data-noopen]'))return;
+  if(e.button>0||e.ctrlKey||e.metaKey||e.shiftKey)return;
+  if(PD&&Math.hypot(e.clientX-PD.x,e.clientY-PD.y)>8)return;
+  const sel=getSelection&&getSelection();if(sel&&!sel.isCollapsed&&String(sel).trim()&&t.contains(sel.anchorNode))return;
+  const o=originOf(t);if(!o)return;e.preventDefault();open(o.key,o)});
  document.addEventListener('keydown',e=>{
   if(openKey){
    if(e.key==='Escape'||e.key==='Backspace'||e.key==='GoBack'||e.key==='BrowserBack'||e.keyCode===461||e.keyCode===10009){e.preventDefault();close();return}
