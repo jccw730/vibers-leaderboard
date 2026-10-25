@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Leaderboard — Season 03</title>
+<link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:ital,wght@0,700;0,800;1,700;1,800&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -392,6 +393,122 @@ html.embed .cd,html.embed .hlinks{display:none!important}
 @media (prefers-reduced-motion:reduce){.cd-live,.cd-live i,.h-watch i{animation:none!important}}
 @media print{.cd,.hlinks{display:none!important}}
 .row[data-key],.p-card[data-key]{scroll-margin-top:70px}
+
+/* ---------- sign up + notify ---------- */
+.hlinks .h-sign{background:var(--acid);color:var(--ink);box-shadow:4px 4px 0 var(--blood)}
+.hlinks .h-sign:hover{box-shadow:6px 6px 0 var(--blood)}
+.cd-right{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.nt-btn{font:italic 800 14px var(--label);letter-spacing:.12em;text-transform:uppercase;padding:10px 18px;background:transparent;color:var(--acid);border:2px solid var(--acid);transform:skewX(-8deg);cursor:pointer;transition:transform .15s var(--punch),box-shadow .15s var(--punch),background .15s}
+.nt-btn>span{display:inline-block;transform:skewX(8deg)}
+.nt-btn:hover{transform:skewX(-8deg) translate(-2px,-2px);box-shadow:5px 5px 0 var(--blood)}
+.nt-btn.on{background:var(--acid);color:var(--ink)}
+.nt-btn:focus-visible{outline:3px solid var(--acid);outline-offset:5px}
+html.tv .nt-btn:focus{outline:4px solid var(--acid);outline-offset:6px}
+html.nt-lock,html.nt-lock body{overflow:hidden!important}
+.nt[hidden]{display:none}
+.nt{position:fixed;inset:0;z-index:210;display:grid;place-items:center;padding:24px}
+.nt-back{position:absolute;inset:0;background:rgba(11,10,8,.82);backdrop-filter:blur(3px)}
+.nt-card{position:relative;width:min(520px,100%);max-height:calc(100vh - 48px);overflow:auto;overscroll-behavior:contain;background:var(--steel);border:2px solid var(--acid);box-shadow:10px 10px 0 var(--blood);padding:30px 28px 26px;outline:none}
+.nt.in .nt-card{animation:vcIn .32s var(--out) both}.nt.in .nt-back{animation:vcFade .2s ease-out both}
+.nt-card h3{font:clamp(34px,5vw,48px)/.95 var(--display);text-transform:uppercase;font-weight:400;padding-right:56px}
+.nt-card h3 em{color:var(--acid);font-style:normal}
+.nt-sub{color:var(--paper-72);font-size:14.5px;margin:8px 0 6px}
+.nt-sec{border-top:1px solid var(--line);padding-top:16px;margin-top:16px}
+.nt-sec h4{font:800 12px var(--label);letter-spacing:.24em;text-transform:uppercase;color:var(--acid);margin-bottom:8px}
+.nt-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.nt-card .btn{font-size:14px;padding:10px 18px;text-decoration:none;display:inline-block}
+.nt-card .btn.ghost{border-width:2px}
+.nt-card .btn:focus-visible,.nt-card input:focus-visible+span{outline:3px solid var(--acid);outline-offset:4px}
+html.tv .nt-card .btn:focus,html.tv .nt-x:focus{outline:4px solid var(--acid);outline-offset:5px}
+.nt-status{font:700 13px var(--label);letter-spacing:.12em;text-transform:uppercase;color:var(--paper-72);margin:10px 0 0}
+.nt-status.ok{color:var(--acid)}.nt-status.bad{color:var(--blood)}
+.nt-check{display:flex;gap:10px;align-items:center;margin-top:12px;font-size:14.5px;color:var(--paper);cursor:pointer}
+.nt-check input{width:20px;height:20px;accent-color:var(--acid)}
+.nt-check input:focus-visible{outline:3px solid var(--acid);outline-offset:3px}
+.nt-check.dis{opacity:.45}
+.nt-note{font-size:12.5px;color:var(--paper-40);margin-top:10px;line-height:1.45}
+@media (max-width:640px){
+ .hlinks{flex-wrap:wrap}.hlinks .h-sign{flex:1 1 100%}
+ .nt{padding:0;place-items:end stretch}
+ .nt-card{width:100%;max-height:92vh;border-width:2px 0 0;box-shadow:none;padding:24px 18px calc(24px + env(safe-area-inset-bottom))}
+ .cd-right{width:100%;justify-content:space-between}
+}
+html.tv .nt-card{width:min(640px,100%)}html.tv .nt-sub,html.tv .nt-check{font-size:17px}
+html.embed .nt-btn,html.embed .h-sign,html.embed .nt{display:none!important}
+@media (prefers-reduced-motion:reduce){.nt.in .nt-card,.nt.in .nt-back{animation:none!important}}
+@media print{.nt,.nt-btn,.h-sign{display:none!important}}
+
+/* ---------- LAYOUT: compact hero strip + slim countdown, podium on first screen ---------- */
+html body .shell .cd{padding:8px 0;min-height:0;gap:8px 20px}
+html body .shell .cd-label{font-size:12px;letter-spacing:.24em;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+html body .shell .cd-label small{display:inline;margin:0;font-size:11.5px}
+html body .shell .cd-right{gap:14px}
+html body .shell .cd-units{gap:6px}
+html body .shell .cd-u{min-width:54px;padding:3px 8px 2px;border-width:1px}
+html body .shell .cd-u:first-child{box-shadow:3px 3px 0 var(--blood);border-width:1px}
+html body .shell .cd-u b{font-size:24px;-webkit-text-stroke-width:1px}
+html body .shell .cd-u small{font-size:9.5px;letter-spacing:.18em}
+html body .shell .cd-live{font-size:24px;padding:6px 16px;box-shadow:4px 4px 0 var(--acid)}
+html body .shell .cd-live i{width:11px;height:11px}
+html body .shell .nt-btn{font-size:12px;padding:7px 12px}
+html body .shell nav{padding:14px 0}
+html body .shell .hero{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:12px 0 12px}
+html body .shell .hero .kicker,html body .shell .hero-meta p,html body .shell .hero h1 br{display:none}
+html body .shell .hero h1{font-size:clamp(22px,2.6vw,34px);line-height:1;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+html body .shell .hero h1 .it{margin-right:.08em}
+html body .shell .hero-meta{margin:0;display:block;flex:none}
+html body .shell .clock{display:flex;align-items:baseline;gap:8px;text-align:right}
+html body .shell .clock small{display:inline;font-size:11px}
+html body .shell .clock b{font-size:clamp(22px,2.4vw,32px)}
+html body .shell #podhead{display:none!important}
+html body .shell .podium{margin-top:4px}
+@media (min-width:901px){
+ html body .shell .p-card{padding:22px 24px 20px}html body .shell .p-card.first{padding-top:40px}
+ html body .shell .portrait{width:76px;height:76px}html body .shell .first .portrait{width:92px;height:92px}
+ html body .shell .p-tag{margin-top:14px}html body .shell .p-name{font-size:clamp(26px,2.6vw,38px);margin:4px 0 12px}
+ html body .shell .p-num{font-size:130px}html body .shell .p-stats b{font-size:24px}html body .shell .p-stats div{padding:6px 0}
+}
+/* compact horizontal podium cards on phones/tablets */
+@media (max-width:900px){
+ html body .shell .podium{display:grid;grid-template-columns:1fr 1fr!important;gap:10px}
+ html body .shell .podium .p-card.first{grid-column:auto}
+ html body .shell .p-card{display:grid;grid-template-columns:52px minmax(0,1fr) auto;grid-template-areas:"a t s" "a n s";column-gap:12px;align-items:center;padding:12px 12px;box-shadow:none}
+ html body .shell .p-card.first{padding-top:12px;box-shadow:4px 4px 0 var(--blood)}
+ html body .shell .p-card .portrait,html body .shell .p-card.first .portrait{grid-area:a;width:52px;height:52px}
+ html body .shell .portrait span{font-size:22px}
+ html body .shell .p-tag{grid-area:t;margin:0;font-size:10.5px;letter-spacing:.1em;line-height:1.35;align-self:end}
+ html body .shell .p-tag .mv{font-size:10px;margin-left:4px;padding:1px 5px}
+ html body .shell .p-name{grid-area:n;font-size:22px;margin:2px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;align-self:start}
+ html body .shell .p-stats{grid-area:s;grid-template-columns:repeat(3,auto);background:none;gap:8px;text-align:center}
+ html body .shell .p-stats div{background:none;padding:0}
+ html body .shell .p-stats small{font-size:9px;letter-spacing:.12em}
+ html body .shell .p-stats b{font-size:20px;line-height:1.1}
+ html body .shell .p-num{font-size:64px;top:-10px;right:-2px}
+ html body .shell .crown{left:auto;right:10px;top:-1px;font-size:9.5px;padding:1px 8px;letter-spacing:.1em}
+ html body .shell .p-move{display:none}
+}
+@media (max-width:640px){
+ html body .shell .podium{grid-template-columns:1fr!important;gap:8px}
+ html body .shell .p-card{padding:10px 12px}
+ html body .shell .p-card.first{padding-top:10px}
+ html body .shell .hero h1{font-size:20px}
+ html body .shell .clock small{font-size:10px;letter-spacing:.1em}
+ html body .shell .clock b{font-size:22px}
+ html body .shell .cd{padding:8px 0}
+ html body .shell .cd-right{width:100%;flex-wrap:nowrap;justify-content:space-between}
+ html body .shell .cd-units{width:auto;flex:1}
+ html body .shell .cd-u{min-width:0;flex:1}
+ html body .shell .cd-u b{font-size:22px}
+ html body .shell nav{padding:12px 0;gap:10px}
+ html body .shell .hlinks{gap:8px}
+ html body .shell .hlinks a{padding:7px 8px}html body .shell .hlinks .h-past{padding:5px 8px}
+}
+html.tv body .shell{padding-top:20px}
+html.tv body .shell .hero{padding:10px 0}
+html.tv body .shell .hero h1{font-size:32px}
+html.tv body .shell .cd-u b{font-size:28px}html.tv body .shell .cd-u small{font-size:11px}html.tv body .shell .cd-label{font-size:14px}html.tv body .shell .cd-label small{font-size:13px}
+html.embed body .shell .hero,html.embed body .shell #podhead{display:none!important}
+html.embed body .shell .podium{margin-top:22px}
 </style>
 <script>
 (function(){const P=new URLSearchParams(location.search),h=document.documentElement;
@@ -408,11 +525,12 @@ html.embed .cd,html.embed .hlinks{display:none!important}
 <div class="shell">
   <nav>
     <a class="wordmark navf" href="https://vibersleague.com" aria-label="Vibers League home">Vibers<em>/</em>League</a>
-    <div class="hlinks"><a class="h-watch navf" id="watchLink" href="https://vibersleague.com" target="_blank" rel="noopener"><span><i></i>Watch live</span></a><a class="h-past navf" id="pastLink" href="https://vibersleague.com" target="_blank" rel="noopener"><span>Past recordings</span></a></div>
+    <div class="hlinks"><a class="h-watch navf" id="watchLink" href="https://vibersleague.com" target="_blank" rel="noopener"><span><i></i>Watch live</span></a><a class="h-past navf" id="pastLink" href="https://vibersleague.com" target="_blank" rel="noopener"><span>Past recordings</span></a><a class="h-sign navf" id="signLink" href="https://vibersleague.com" target="_blank" rel="noopener"><span>Sign up as a viber</span></a></div>
     <div class="live"><i></i>Live standings</div>
   </nav>
   <section class="cd" id="cd" aria-label="Countdown to the next match">
     <div class="cd-label">Next match<small id="cd-when">--</small></div>
+    <div class="cd-right">
     <div class="cd-units" role="timer" aria-live="off">
       <div class="cd-u"><div><b id="cd-d">--</b><small>Days</small></div></div>
       <div class="cd-u"><div><b id="cd-h">--</b><small>Hrs</small></div></div>
@@ -420,6 +538,8 @@ html.embed .cd,html.embed .hlinks{display:none!important}
       <div class="cd-u"><div><b id="cd-s">--</b><small>Sec</small></div></div>
     </div>
     <div class="cd-live" role="status"><span><i></i>Live now</span></div>
+    <button class="nt-btn navf" id="ntOpen" aria-haspopup="dialog"><span>🔔 Notify me</span></button>
+    </div>
   </section>
   <header class="hero">
     <div class="kicker">Season standings</div>
@@ -455,6 +575,30 @@ html.embed .cd,html.embed .hlinks{display:none!important}
     <div class="vc-foot"><span id="vc-vid"></span><button class="btn acid" id="vc-print"><span>Print card</span></button></div>
   </article>
 </div>
+<div id="nt" class="nt" hidden aria-hidden="true">
+  <div class="nt-back" data-ntclose></div>
+  <section class="nt-card" id="nt-card" role="dialog" aria-modal="true" aria-labelledby="nt-title" tabindex="-1">
+    <button class="vc-x nt-x" data-ntclose aria-label="Close notifications"><span>✕</span></button>
+    <h3 id="nt-title">Get the <em>call</em></h3>
+    <p class="nt-sub" id="nt-when">Next match</p>
+    <div class="nt-sec">
+      <h4>Browser alerts</h4>
+      <div class="nt-row"><button class="btn acid" id="nt-toggle"><span>Turn on alerts</span></button><button class="btn ghost" id="nt-test" hidden><span>Send test</span></button></div>
+      <label class="nt-check" id="nt-moves-l"><input type="checkbox" id="nt-moves"> <span>Also alert me when the leaderboard order changes</span></label>
+      <p class="nt-status" id="nt-status" role="status"></p>
+      <p class="nt-note">Alerts 15 min before the match, at LIVE NOW and on position changes. They only fire while this page is open in a tab; there's no push server. Stored on this device only.</p>
+    </div>
+    <div class="nt-sec">
+      <h4>Add to calendar</h4>
+      <div class="nt-row"><button class="btn acid" id="nt-ics"><span>Download .ics</span></button><a class="btn ghost" id="nt-gcal" href="#" target="_blank" rel="noopener"><span>Google Calendar</span></a></div>
+    </div>
+    <div class="nt-sec" id="nt-email-sec">
+      <h4>Email updates</h4>
+      <div class="nt-row"><a class="btn ghost" id="nt-email" href="#" target="_blank" rel="noopener"><span>Email updates</span></a></div>
+      <p class="nt-note">Sign up on vibersleague.com and they send you the episode when it drops.</p>
+    </div>
+  </section>
+</div>
 <script>
 /* ================= CONFIG ================= */
 // NEXT_MATCH_ISO: PLACEHOLDER. vibersleague.com (home, /about/, /rules/, /episodes/) says "FIRST CARD · DATE TO BE CALLED"
@@ -464,6 +608,12 @@ const NEXT_MATCH_ISO = '2026-10-31T21:00:00-07:00';
 const STREAM_URL = 'https://vibersleague.com';
 // RECORDINGS_URL: REAL. Episodes page where each night is released in 2 cuts (episode + uncut tape): https://vibersleague.com/episodes/
 const RECORDINGS_URL = 'https://vibersleague.com/episodes/';
+// SIGNUP_URL: REAL. Viber application form, linked from the home page "Apply to compete" (href="apply/?as=viber"); listed in https://www.vibersleague.com/sitemap.xml as /apply/.
+const SIGNUP_URL = 'https://vibersleague.com/apply/?as=viber';
+// EMAIL_UPDATES_URL: REAL. Home page audience form ("leave your email and we send you the episode when it drops"); /episodes/ "Leave your email" links to it. Set to '' to hide.
+const EMAIL_UPDATES_URL = 'https://vibersleague.com/#entry';
+// Calendar event link (as requested by the brief).
+const EVENT_URL = 'https://vibersleague.com';
 /* ========================================== */
 const SHEET="17f1nH3vcuk-pPknxTF1mcL6tn9v_gsexvFAlDhfq_lk";
 const URLS=[`https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?tqx=out:csv&sheet=Leaderboard`,`https://docs.google.com/spreadsheets/d/${SHEET}/export?format=csv`];
@@ -559,7 +709,7 @@ async function load(){$('status').textContent="Loading from the sheet…";
  for(const f of tries){try{const d=norm(await f());if(!d.length)throw 0;DATA=d;LIVE=true;$('error').innerHTML="";
    $('status').textContent="Live · loaded "+new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit",second:"2-digit"});
    const order=DATA.map(p=>p.key).join("|"),prevOrder=LASTORDER,prevPts=LASTPTS,first=prevOrder===null;
-   draw();VC.refresh();
+   draw();VC.refresh();if(!first&&prevOrder&&order!==prevOrder)NT.onOrder(prevOrder,order);
    if(first||FORCE||LB.replay)playNight();
    else if(order!==prevOrder){const o={};prevOrder.split("|").forEach((k,i)=>o[k]=i);animate(o,prevPts)}
    FORCE=false;LASTORDER=order;LASTPTS=Object.fromEntries(DATA.map(p=>[p.key,p.points]));return}catch(e){}}
@@ -572,7 +722,7 @@ applyMode();if(LB.tv)setTimeout(()=>$('refresh').focus({preventScroll:true}),300
 (function(){let dir=1,hold=Date.now()+4000,last=0;
  addEventListener('keydown',()=>{hold=Date.now()+15000});
  function step(t){const dt=Math.min(64,t-(last||t));last=t;
-  if((LB.tv||LB.embed)&&LB.scroll&&!VC.isOpen()&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  if((LB.tv||LB.embed)&&LB.scroll&&!VC.isOpen()&&!NT.isOpen()&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
    const z=parseFloat(document.body.style.zoom)||1,max=document.documentElement.scrollHeight-innerHeight/1;
    if(max>4&&Date.now()>hold){const y=scrollY+dt*0.03*z*dir;
     if(y>=max){scrollTo(0,max);hold=Date.now()+5000;dir=0}
@@ -657,7 +807,7 @@ const VC=(function(){
 
 /* ---------- countdown ---------- */
 (function(){
- document.getElementById('watchLink').href=STREAM_URL;document.getElementById('pastLink').href=RECORDINGS_URL;
+ document.getElementById('watchLink').href=STREAM_URL;document.getElementById('signLink').href=SIGNUP_URL;document.getElementById('pastLink').href=RECORDINGS_URL;
  const ov=new URLSearchParams(location.search).get('nextmatch');let t=Date.parse(ov||NEXT_MATCH_ISO);if(isNaN(t))t=Date.parse(NEXT_MATCH_ISO);
  const cd=$('cd'),el={d:$('cd-d'),h:$('cd-h'),m:$('cd-m'),s:$('cd-s')},pad=n=>String(n).padStart(2,"0");
  try{$('cd-when').textContent=new Date(t).toLocaleString([], {weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit",timeZoneName:"short"})}catch(e){}
@@ -668,6 +818,83 @@ const VC=(function(){
   set(el.d,pad(Math.floor(s/86400)));set(el.h,pad(Math.floor(s%86400/3600)));set(el.m,pad(Math.floor(s%3600/60)));set(el.s,pad(s%60));
   setTimeout(tick,1000-(Date.now()%1000)+5)}
  tick();
+})();
+
+/* ---------- notifications + calendar (client only, no backend) ---------- */
+const NT=(function(){
+ const root=$('nt'),card=$('nt-card'),SK='vl-notify',FK='vl-notified';
+ const ov=new URLSearchParams(location.search).get('nextmatch');let MT=Date.parse(ov||NEXT_MATCH_ISO);if(isNaN(MT))MT=Date.parse(NEXT_MATCH_ISO);
+ const ls={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+ let st=ls.get(SK,{on:false,moves:true}),isOpen=false,savedY=0,ret=null;
+ const supported=()=>'Notification' in window;
+ const perm=()=>supported()?Notification.permission:'unsupported';
+ const active=()=>st.on&&perm()==='granted';
+ function fired(k){const f=ls.get(FK,{});if(f[k])return true;f[k]=Date.now();const ks=Object.keys(f);if(ks.length>60)ks.sort((a,b)=>f[a]-f[b]).slice(0,ks.length-60).forEach(x=>delete f[x]);ls.set(FK,f);return false}
+ function notify(title,body,tag){if(!active())return false;
+  try{const n=new Notification(title,{body,tag:tag||'vl',icon:'https://vibersleague.com/assets/favicon.svg'});n.onclick=()=>{window.focus();n.close()};return true}
+  catch(e){status('This browser only allows alerts from an installed app, so on-page alerts are not available here.','bad');return false}}
+ function status(t,c){const e=$('nt-status');e.textContent=t;e.className='nt-status'+(c?' '+c:'')}
+ function render(){const p=perm(),on=active();
+  $('nt-toggle').firstElementChild.textContent=on?'Turn off alerts':'Turn on alerts';$('nt-toggle').className='btn '+(on?'ghost':'acid');
+  $('nt-test').hidden=!on;$('nt-moves').checked=!!st.moves;$('nt-moves').disabled=!on;$('nt-moves-l').classList.toggle('dis',!on);
+  $('ntOpen').classList.toggle('on',on);$('ntOpen').firstElementChild.textContent=on?'🔔 Alerts on':'🔔 Notify me';
+  if(p==='unsupported'){status('This browser does not support notifications. Use Add to calendar instead.','bad');$('nt-toggle').disabled=true}
+  else if(p==='denied'){status('Notifications are blocked for this site. Allow them in your browser\'s site settings, then try again.','bad')}
+  else if(on)status('Alerts are on for this device.','ok');else status(p==='granted'?'Alerts are off.':'Alerts are off. Your browser will ask for permission.')}
+ async function toggle(){
+  if(active()){st.on=false;ls.set(SK,st);render();return}
+  if(!supported()){render();return}
+  let p=Notification.permission;
+  if(p==='default'){try{p=await Notification.requestPermission()}catch(e){p=Notification.permission}}
+  if(p!=='granted'){st.on=false;ls.set(SK,st);render();if(p==='default')status('Permission was not given. Alerts stay off.','bad');return}
+  st.on=true;ls.set(SK,st);render();notify('Vibers League alerts are on','We\'ll ping you 15 min before the next match and when it goes live.','vl-test')}
+ /* schedule: checks every 15s while the page is open, deduped across tabs via localStorage */
+ function check(){if(!active())return;const now=Date.now(),id=new Date(MT).toISOString();
+  if(now>=MT-15*60e3&&now<MT&&!fired('pre:'+id))notify('Vibers League starts in 15 min','The next match goes live at '+new Date(MT).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'.','vl-pre');
+  if(now>=MT&&now<MT+3*3600e3&&!fired('live:'+id))notify('LIVE NOW: Vibers League','The next match is on.','vl-live')}
+ setInterval(check,15000);setTimeout(check,1500);
+ function onOrder(prev,cur){if(!active()||!st.moves)return;if(fired('move:'+cur))return;
+  const o={};prev.split('|').forEach((k,i)=>o[k]=i);
+  const ups=DATA.map((p,i)=>({p,d:o[p.key]==null?0:o[p.key]-i})).filter(x=>x.d>0).sort((a,b)=>b.d-a.d);
+  if(!ups.length){notify('Leaderboard update','The order changed. Top: '+(DATA[0]?DATA[0].name:''),'vl-move');return}
+  const top=ups[0].p,more=ups.slice(1,3).map(x=>`${x.p.name} to ${ord(x.p.place)}`);
+  notify(`${top.name} climbs to ${ord(top.place)}`,more.length?'Also up: '+more.join(', '):`Now on ${top.points} pts.`,'vl-move')}
+ /* calendar */
+ const z=d=>new Date(d).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+ const icsEsc=t=>String(t).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\n/g,'\\n');
+ const TITLE='Vibers League: next match',DESC='4 vibers, 1 real business problem, 60 minutes on the clock. Leaderboard and updates: '+EVENT_URL;
+ function ics(){const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Vibers League//Leaderboard//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH','BEGIN:VEVENT',
+   'UID:next-match-'+z(MT)+'@vibersleague.com','DTSTAMP:'+z(Date.now()),'DTSTART:'+z(MT),'DTEND:'+z(MT+3600e3),'SUMMARY:'+icsEsc(TITLE),'DESCRIPTION:'+icsEsc(DESC),'LOCATION:'+icsEsc('Vancouver, BC'),'URL:'+EVENT_URL,
+   'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+icsEsc('Vibers League starts in 15 minutes'),'TRIGGER:-PT15M','END:VALARM','END:VEVENT','END:VCALENDAR'];
+  return L.map(l=>{let o='';while(l.length>74){o+=l.slice(0,74)+'\r\n ';l=l.slice(74)}return o+l}).join('\r\n')+'\r\n'}
+ function downloadIcs(){const b=new Blob([ics()],{type:'text/calendar;charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');
+  a.href=u;a.download='vibers-league-next-match.ics';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
+ const gcal='https://calendar.google.com/calendar/render?'+new URLSearchParams({action:'TEMPLATE',text:TITLE,dates:z(MT)+'/'+z(MT+3600e3),details:DESC,location:'Vancouver, BC'}).toString();
+ $('nt-gcal').href=gcal;
+ if(EMAIL_UPDATES_URL)$('nt-email').href=EMAIL_UPDATES_URL;else $('nt-email-sec').remove();
+ try{$('nt-when').textContent='Next match · '+new Date(MT).toLocaleString([], {weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'})}catch(e){}
+ /* panel */
+ const focusables=()=>[...card.querySelectorAll('button:not([hidden]):not([disabled]),a[href],input:not([disabled])')].filter(e=>e.getClientRects().length);
+ function open(){if(isOpen||VC.isOpen())return;isOpen=true;ret=document.activeElement;savedY=scrollY;render();
+  document.documentElement.classList.add('nt-lock');root.hidden=false;root.setAttribute('aria-hidden','false');
+  root.classList.remove('in');if(!RM()){root.offsetWidth;root.classList.add('in')}
+  (focusables()[1]||card).focus({preventScroll:true});scrollTo(0,savedY)}
+ function close(){if(!isOpen)return;isOpen=false;root.hidden=true;root.setAttribute('aria-hidden','true');root.classList.remove('in');
+  document.documentElement.classList.remove('nt-lock');scrollTo(0,savedY);($('ntOpen')).focus({preventScroll:true});scrollTo(0,savedY)}
+ $('ntOpen').onclick=open;$('nt-toggle').onclick=toggle;$('nt-ics').onclick=downloadIcs;
+ $('nt-test').onclick=()=>{notify('Test alert','This is how Vibers League alerts look.','vl-test')&&status('Test alert sent.','ok')};
+ $('nt-moves').onchange=e=>{st.moves=e.target.checked;ls.set(SK,st)};
+ root.addEventListener('click',e=>{if(e.target.closest('[data-ntclose]'))close()});
+ document.addEventListener('keydown',e=>{if(!isOpen)return;
+  if(e.key==='Escape'||e.key==='GoBack'||e.key==='BrowserBack'||e.keyCode===461||e.keyCode===10009||(e.key==='Backspace'&&!/INPUT/.test(document.activeElement.tagName))){e.preventDefault();e.stopImmediatePropagation();close();return}
+  const f=focusables(),i=f.indexOf(document.activeElement);
+  if(e.key==='Tab'||e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();e.stopImmediatePropagation();
+   const back=e.key==='ArrowUp'||(e.key==='Tab'&&e.shiftKey);f[back?(i<=0?f.length-1:i-1):(i+1)%f.length].focus({preventScroll:true});return}
+  e.stopImmediatePropagation()},true);
+ document.addEventListener('focusin',e=>{if(isOpen&&!root.contains(e.target))(focusables()[0]||card).focus({preventScroll:true})});
+ addEventListener('storage',e=>{if(e.key===SK){st=ls.get(SK,st);render()}});
+ render();
+ return{isOpen:()=>isOpen,open,close,onOrder,ics,gcal,notify,check,state:()=>({...st,perm:perm()})}
 })();
 load();setInterval(load,30000);
 </script>
